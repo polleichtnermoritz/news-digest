@@ -5,9 +5,13 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 from collections import Counter, defaultdict
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+import anthropic
 
 from digest.cluster import cluster_items
 from digest.enrich import enrich_all, is_paper_source
@@ -15,16 +19,17 @@ from digest.fetch import fetch_all
 from digest.fetch.common import SourceFetchResult
 from digest.llm import CostTracker
 from digest.llm import make_client as make_llm_client
-from digest.models import Cluster, Group, Item, ScoredCluster, Summary
+from digest.models import Cluster, Digest, Group, Item, ScoredCluster, Summary
 from digest.prefilter import load_filters, prefilter
 from digest.rank import rank_clusters, write_scored_json
 from digest.render import build_digest, render_site
-from digest.settings import PROJECT_ROOT, load_settings
+from digest.settings import PROJECT_ROOT, Settings, load_settings
 from digest.sources import load_sources
-from digest.state import load_seen, unseen_clusters
+from digest.state import load_seen, mark_seen, prune_seen, save_seen, unseen_clusters
 from digest.summarize import generate_overviews, summarize_clusters
 
 ENRICH_SAMPLE_PER_GROUP = 3
+VIENNA_TZ = ZoneInfo("Europe/Vienna")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -41,6 +46,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--date", help="run as if today were this ISO date (YYYY-MM-DD)")
     parser.add_argument("--from-fixture", help="replay a recorded fixture instead of fetching live")
+    parser.add_argument(
+        "--run",
+        action="store_true",
+        help="run the full live pipeline: fetch, rank, summarize, render, and update state. "
+        "This is what the scheduled GitHub Actions workflow calls -- it costs real LLM money.",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="with --run, skip the Vienna delivery-hour gate (used for workflow_dispatch)",
+    )
     return parser
 
 
@@ -164,6 +180,50 @@ def _print_cost_report(cost: CostTracker) -> None:
     print(json.dumps(cost.summary(), indent=2))
 
 
+async def rank_enrich_summarize_render(
+    new_clusters: list[Cluster],
+    settings: Settings,
+    client: anthropic.AsyncAnthropic,
+    cost: CostTracker,
+    run_date: date,
+) -> tuple[list[ScoredCluster], Digest]:
+    """Shared tail of the pipeline: rank -> write scored.json -> enrich the
+    kept leads -> summarize -> German overview -> render. Used by both
+    --from-fixture (read-only w.r.t. state/seen.json) and --run (which marks
+    the kept clusters seen afterwards)."""
+    scored = await rank_clusters(new_clusters, settings, client=client, cost=cost)
+    write_scored_json(scored)
+    _print_rank_report(scored)
+
+    kept = [sc.cluster for sc in scored if sc.kept]
+    await enrich_all(kept, settings.enrich)
+
+    summaries = await summarize_clusters(kept, settings, client=client, cost=cost)
+    _print_summarize_report(kept, summaries)
+
+    scored_by_group: dict[Group, list[ScoredCluster]] = defaultdict(list)
+    for sc in scored:
+        if sc.kept:
+            scored_by_group[sc.cluster.group].append(sc)
+    overviews = await generate_overviews(
+        scored_by_group, summaries, settings, client=client, cost=cost
+    )
+
+    print("\nGerman overviews:")
+    for group, text in overviews.items():
+        print(f"  [{group.value}] {text}")
+
+    cost.write_log()
+    _print_cost_report(cost)
+
+    digest = build_digest(run_date, scored, summaries, overviews)
+    (PROJECT_ROOT / "out" / "digest.json").write_text(digest.model_dump_json(indent=2))
+    page_path = render_site(digest)
+    print(f"\nRendered {page_path.relative_to(PROJECT_ROOT)}")
+
+    return scored, digest
+
+
 async def run_from_fixture(path: Path) -> None:
     settings = load_settings()
     raw = json.loads(path.read_text())
@@ -176,36 +236,72 @@ async def run_from_fixture(path: Path) -> None:
 
     cost = CostTracker(token_cap=settings.token_cap_per_run)
     async with make_llm_client() as client:
-        scored = await rank_clusters(new_clusters, settings, client=client, cost=cost)
-        write_scored_json(scored)
-        _print_rank_report(scored)
-
-        kept = [sc.cluster for sc in scored if sc.kept]
-        await enrich_all(kept, settings.enrich)
-
-        summaries = await summarize_clusters(kept, settings, client=client, cost=cost)
-        _print_summarize_report(kept, summaries)
-
-        scored_by_group: dict[Group, list[ScoredCluster]] = defaultdict(list)
-        for sc in scored:
-            if sc.kept:
-                scored_by_group[sc.cluster.group].append(sc)
-        overviews = await generate_overviews(
-            scored_by_group, summaries, settings, client=client, cost=cost
+        await rank_enrich_summarize_render(
+            new_clusters, settings, client, cost, datetime.now(UTC).date()
         )
 
-    print("\nGerman overviews:")
-    for group, text in overviews.items():
-        print(f"  [{group.value}] {text}")
 
-    cost.write_log()
-    _print_cost_report(cost)
+def should_run_now(vienna_hour: int, delivery_hour: int, force: bool) -> bool:
+    return force or vienna_hour == delivery_hour
+
+
+def _write_github_output(name: str, value: str) -> None:
+    path = os.environ.get("GITHUB_OUTPUT")
+    if not path:
+        return
+    with open(path, "a") as f:
+        f.write(f"{name}={value}\n")
+
+
+async def run_live(force: bool = False) -> bool:
+    """The production entry point the scheduled workflow calls: fetches
+    live, calls the real LLM, renders site/, and marks kept clusters seen.
+    Gated to settings.delivery_hour_vienna unless --force (used for both
+    workflow_dispatch and local manual runs), so the DST-safe double cron
+    can fire twice a day and only do real work once."""
+    settings = load_settings()
+    vienna_hour = datetime.now(VIENNA_TZ).hour
+    if not should_run_now(vienna_hour, settings.delivery_hour_vienna, force):
+        print(
+            f"Vienna local hour is {vienna_hour:02d}:00, delivery hour is "
+            f"{settings.delivery_hour_vienna:02d}:00 -- skipping (use --force to run anyway)."
+        )
+        _write_github_output("ran", "false")
+        return False
+
+    print(f"Running at Vienna local hour {vienna_hour:02d}:00\n")
+
+    sources = load_sources()
+    results = await fetch_all(sources)
+    _print_fetch_report(results)
+
+    all_items = [item for r in results for item in r.items]
+    filtered_items = prefilter(all_items, load_filters())
+    _print_prefilter_report(all_items, filtered_items)
+
+    clusters = cluster_items(filtered_items, threshold=settings.cluster.title_similarity_threshold)
+    seen = load_seen()
+    new_clusters = unseen_clusters(clusters, seen)
+    _print_cluster_report(clusters, len(seen), new_clusters)
 
     run_date = datetime.now(UTC).date()
-    digest = build_digest(run_date, scored, summaries, overviews)
-    (PROJECT_ROOT / "out" / "digest.json").write_text(digest.model_dump_json(indent=2))
-    page_path = render_site(digest)
-    print(f"\nRendered {page_path.relative_to(PROJECT_ROOT)}")
+    cost = CostTracker(token_cap=settings.token_cap_per_run)
+    async with make_llm_client() as client:
+        scored, _digest = await rank_enrich_summarize_render(
+            new_clusters, settings, client, cost, run_date
+        )
+
+    kept_clusters = [sc.cluster for sc in scored if sc.kept]
+    seen = mark_seen(seen, kept_clusters, run_date)
+    seen = prune_seen(seen, settings.state.seen_retention_days, run_date)
+    save_seen(seen)
+    print(
+        f"\nState: marked {len(kept_clusters)} published clusters as seen, "
+        f"{len(seen)} total after pruning"
+    )
+
+    _write_github_output("ran", "true")
+    return True
 
 
 def app() -> None:
@@ -216,11 +312,15 @@ def app() -> None:
         asyncio.run(run_from_fixture(Path(args.from_fixture)))
         return
 
+    if args.run:
+        asyncio.run(run_live(force=args.force))
+        return
+
     if args.dry_run:
         asyncio.run(run_dry_run())
         return
 
-    parser.error("no pipeline stages are implemented yet; use --dry-run or --from-fixture")
+    parser.error("no pipeline stages are implemented yet; use --dry-run, --from-fixture, or --run")
 
 
 if __name__ == "__main__":
