@@ -20,6 +20,7 @@ from digest.fetch.common import SourceFetchResult
 from digest.llm import CostTracker
 from digest.llm import make_client as make_llm_client
 from digest.models import Cluster, Digest, Group, Item, ScoredCluster, Summary
+from digest.notify import TelegramNotifier, format_error_message, format_success_message
 from digest.prefilter import load_filters, prefilter
 from digest.rank import rank_clusters, write_scored_json
 from digest.render import build_digest, render_site
@@ -271,37 +272,60 @@ async def run_live(force: bool = False) -> bool:
 
     print(f"Running at Vienna local hour {vienna_hour:02d}:00\n")
 
-    sources = load_sources()
-    results = await fetch_all(sources)
-    _print_fetch_report(results)
+    try:
+        sources = load_sources()
+        results = await fetch_all(sources)
+        _print_fetch_report(results)
 
-    all_items = [item for r in results for item in r.items]
-    filtered_items = prefilter(all_items, load_filters())
-    _print_prefilter_report(all_items, filtered_items)
+        all_items = [item for r in results for item in r.items]
+        filtered_items = prefilter(all_items, load_filters())
+        _print_prefilter_report(all_items, filtered_items)
 
-    clusters = cluster_items(filtered_items, threshold=settings.cluster.title_similarity_threshold)
-    seen = load_seen()
-    new_clusters = unseen_clusters(clusters, seen)
-    _print_cluster_report(clusters, len(seen), new_clusters)
-
-    run_date = datetime.now(UTC).date()
-    cost = CostTracker(token_cap=settings.token_cap_per_run)
-    async with make_llm_client() as client:
-        scored, _digest = await rank_enrich_summarize_render(
-            new_clusters, settings, client, cost, run_date
+        clusters = cluster_items(
+            filtered_items, threshold=settings.cluster.title_similarity_threshold
         )
+        seen = load_seen()
+        new_clusters = unseen_clusters(clusters, seen)
+        _print_cluster_report(clusters, len(seen), new_clusters)
 
-    kept_clusters = [sc.cluster for sc in scored if sc.kept]
-    seen = mark_seen(seen, kept_clusters, run_date)
-    seen = prune_seen(seen, settings.state.seen_retention_days, run_date)
-    save_seen(seen)
-    print(
-        f"\nState: marked {len(kept_clusters)} published clusters as seen, "
-        f"{len(seen)} total after pruning"
-    )
+        run_date = datetime.now(UTC).date()
+        cost = CostTracker(token_cap=settings.token_cap_per_run)
+        async with make_llm_client() as client:
+            scored, digest = await rank_enrich_summarize_render(
+                new_clusters, settings, client, cost, run_date
+            )
+
+        kept_clusters = [sc.cluster for sc in scored if sc.kept]
+        seen = mark_seen(seen, kept_clusters, run_date)
+        seen = prune_seen(seen, settings.state.seen_retention_days, run_date)
+        save_seen(seen)
+        print(
+            f"\nState: marked {len(kept_clusters)} published clusters as seen, "
+            f"{len(seen)} total after pruning"
+        )
+    except Exception as exc:
+        error_text = f"{type(exc).__name__}: {exc}"[:300]
+        await _try_notify(format_error_message(error_text))
+        _write_github_output("ran", "false")
+        raise
+
+    page_url = f"{settings.site_base_url}/digest/{run_date.isoformat()}.html"
+    message = format_success_message(digest, page_url)
+    await _try_notify(message)
 
     _write_github_output("ran", "true")
     return True
+
+
+async def _try_notify(text: str) -> None:
+    """Best-effort: a notification failure must never crash the run (the
+    pipeline already succeeded or already failed by the time we send one),
+    but it also must not pass silently -- print it either way."""
+    try:
+        await TelegramNotifier().send(text)
+        print(f"\nNotified: {text}")
+    except Exception as exc:  # noqa: BLE001 - deliberately broad, see docstring
+        print(f"\nWARNING: failed to send notification: {exc!r}")
 
 
 def app() -> None:

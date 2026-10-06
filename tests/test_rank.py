@@ -28,6 +28,7 @@ def make_settings(**top_n_overrides: int) -> Settings:
     top_n.update(top_n_overrides)
     return Settings(
         delivery_hour_vienna=7,
+        site_base_url="https://example.github.io/news-digest",
         top_n_per_group=TopNPerGroup(**top_n),
         models=Models(ranking="claude-haiku-4-5", summarize="claude-haiku-4-5"),
         token_cap_per_run=1_000_000,

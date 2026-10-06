@@ -1,5 +1,7 @@
 delivery_hour_vienna: 7
 
+site_base_url: "https://polleichtnermoritz.github.io/news-digest"
+
 top_n_per_group:
   tech: 8
   geopolitics: 8

@@ -23,6 +23,7 @@ from tests.fakes import FakeAnthropicClient, FakeResponse
 def make_settings() -> Settings:
     return Settings(
         delivery_hour_vienna=7,
+        site_base_url="https://example.github.io/news-digest",
         top_n_per_group=TopNPerGroup(tech=8, geopolitics=8, science=5, laws_minimum=2),
         models=Models(ranking="claude-haiku-4-5", summarize="claude-haiku-4-5"),
         token_cap_per_run=1_000_000,

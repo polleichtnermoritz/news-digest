@@ -38,6 +38,7 @@ class StateSettings(BaseModel):
 
 class Settings(BaseModel):
     delivery_hour_vienna: int
+    site_base_url: str
     top_n_per_group: TopNPerGroup
     models: Models
     token_cap_per_run: int
