@@ -96,6 +96,19 @@ async def test_final_score_combines_llm_score_weight_and_coverage() -> None:
     assert sc.kept is True
 
 
+async def test_max_tokens_scales_with_group_size() -> None:
+    # Regression test: a fixed max_tokens truncated large groups' JSON
+    # output mid-string in production (see commit message). The request's
+    # max_tokens must grow with the number of clusters being ranked.
+    clusters = [make_cluster(str(i)) for i in range(500)]
+    client = FakeAnthropicClient([ranking_response_for(clusters, {c.id: 5.0 for c in clusters})])
+    cost = CostTracker(token_cap=10_000_000)
+
+    await rank_clusters(clusters, make_settings(), client=client, cost=cost)
+
+    assert client.messages.calls[0]["max_tokens"] >= 500 * 40
+
+
 async def test_top_n_selection_keeps_only_the_highest_scored() -> None:
     clusters = [make_cluster(str(i), weight=1) for i in range(5)]
     scores = {c.id: float(i) for i, c in enumerate(clusters)}  # 0,1,2,3,4

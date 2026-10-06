@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import anthropic
+import pydantic
 from pydantic import BaseModel
 
 from digest.settings import PROJECT_ROOT
@@ -108,19 +109,30 @@ async def call_structured[T: BaseModel](
 
     for _ in range(retries + 1):
         try:
-            response = await client.messages.parse(
+            # Streaming avoids the SDK's hard failure on non-streaming
+            # requests whose max_tokens could plausibly take >10 minutes to
+            # generate -- real for our large per-group ranking calls.
+            async with client.messages.stream(
                 model=model,
                 max_tokens=max_tokens,
                 system=system,
                 messages=[{"role": "user", "content": user_content}],
                 output_format=output_format,
-            )
+            ) as stream:
+                response = await stream.get_final_message()
         except (
             anthropic.AuthenticationError,
             anthropic.PermissionDeniedError,
             anthropic.NotFoundError,
         ):
             raise  # config/credential problems won't fix themselves on retry
+        except pydantic.ValidationError:
+            # The SDK raises this when the model's JSON is malformed or got
+            # cut off mid-string (e.g. max_tokens too low for the output
+            # size) -- it never reaches us as a usable response object, so
+            # there's no usage to record for this attempt. Treat it like
+            # any other failed attempt and retry.
+            continue
         except (anthropic.RateLimitError, anthropic.APIStatusError, anthropic.APIConnectionError):
             continue
 

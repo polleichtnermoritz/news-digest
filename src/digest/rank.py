@@ -28,6 +28,16 @@ COVERAGE_BONUS_PER_OUTLET = 0.5
 COVERAGE_BONUS_MAX = 2.0
 
 MAX_TEASER_CHARS_IN_PROMPT = 200
+
+# Ranking returns one JSON object per cluster (index + score + a one-line
+# reason); this must scale with group size or large groups truncate
+# mid-response and fail to parse. 60 tokens/item is a generous estimate;
+# ceiling is Haiku 4.5's actual max_tokens (confirmed via the Models API).
+# Backlogs beyond ~1000 clusters in one group would need to be chunked
+# across multiple calls -- not needed at today's volume.
+RANK_OUTPUT_TOKENS_PER_ITEM = 60
+RANK_MAX_TOKENS_FLOOR = 1024
+RANK_MAX_TOKENS_CEILING = 64_000
 RANK_MAX_ATTEMPTS = 2
 
 
@@ -88,6 +98,10 @@ async def _rank_group(
     score for every cluster if the model never returns a complete ranking."""
     now = datetime.now(UTC)
     prompt = _build_prompt(clusters, topic, now)
+    max_tokens = min(
+        RANK_MAX_TOKENS_CEILING,
+        max(RANK_MAX_TOKENS_FLOOR, len(clusters) * RANK_OUTPUT_TOKENS_PER_ITEM),
+    )
 
     for _ in range(RANK_MAX_ATTEMPTS):
         response = await call_structured(
@@ -98,6 +112,7 @@ async def _rank_group(
             "on the text given; never invent facts not present in the titles/teasers.",
             user_content=prompt,
             output_format=RankingResponse,
+            max_tokens=max_tokens,
             retries=0,
         )
         if response is not None and _is_complete(response, len(clusters)):

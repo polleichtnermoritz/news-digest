@@ -2,6 +2,7 @@ from pathlib import Path
 
 import anthropic
 import httpx2
+import pydantic
 import pytest
 from pydantic import BaseModel
 
@@ -60,6 +61,29 @@ async def test_call_structured_success() -> None:
 
     assert result == Dummy(value="ok")
     assert cost.calls == 1
+
+
+def _make_validation_error() -> pydantic.ValidationError:
+    try:
+        pydantic.TypeAdapter(Dummy).validate_json("{not valid json")
+    except pydantic.ValidationError as exc:
+        return exc
+    raise AssertionError("expected a ValidationError")
+
+
+async def test_call_structured_retries_on_truncated_json_then_succeeds() -> None:
+    # Regression test: a response whose JSON got cut off mid-string (e.g.
+    # max_tokens too low for a large batch) raises ValidationError straight
+    # out of client.messages.parse(), before we ever see a usable response
+    # object -- this must be treated as a retryable attempt, not crash.
+    client = FakeAnthropicClient([_make_validation_error(), FakeResponse(Dummy(value="ok"))])
+    cost = CostTracker(token_cap=1_000_000)
+
+    result = await call_structured(
+        client, cost, "claude-haiku-4-5", "system", "user", Dummy, retries=1
+    )
+
+    assert result == Dummy(value="ok")
 
 
 async def test_call_structured_retries_once_on_none_then_succeeds() -> None:

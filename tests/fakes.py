@@ -24,19 +24,37 @@ class FakeResponse:
 ResponseScript = list[FakeResponse | Exception] | Callable[[int, dict[str, Any]], Any]
 
 
+class FakeStream:
+    def __init__(self, response_or_exc: FakeResponse | Exception) -> None:
+        self._response_or_exc = response_or_exc
+
+    async def get_final_message(self) -> FakeResponse:
+        if isinstance(self._response_or_exc, Exception):
+            raise self._response_or_exc
+        return self._response_or_exc
+
+
+class FakeStreamManager:
+    def __init__(self, response_or_exc: FakeResponse | Exception) -> None:
+        self._stream = FakeStream(response_or_exc)
+
+    async def __aenter__(self) -> FakeStream:
+        return self._stream
+
+    async def __aexit__(self, *exc_info: object) -> None:
+        return None
+
+
 class FakeMessages:
     def __init__(self, script: ResponseScript) -> None:
         self.script = script
         self.calls: list[dict[str, Any]] = []
 
-    async def parse(self, **kwargs: Any) -> FakeResponse:
+    def stream(self, **kwargs: Any) -> FakeStreamManager:
         index = len(self.calls)
         self.calls.append(kwargs)
-
         item = self.script(index, kwargs) if callable(self.script) else self.script[index]
-        if isinstance(item, Exception):
-            raise item
-        return item
+        return FakeStreamManager(item)
 
 
 class FakeAnthropicClient:
