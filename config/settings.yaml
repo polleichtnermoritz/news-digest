@@ -7,8 +7,8 @@ top_n_per_group:
   laws_minimum: 2
 
 models:
-  ranking: "claude-haiku-4-5-20251001"
-  summarize: "claude-haiku-4-5-20251001"
+  ranking: "claude-haiku-4-5"
+  summarize: "claude-haiku-4-5"
 
 token_cap_per_run: 200000
 

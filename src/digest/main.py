@@ -4,17 +4,23 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-from collections import Counter
+import json
+from collections import Counter, defaultdict
+from pathlib import Path
 
 from digest.cluster import cluster_items
 from digest.enrich import enrich_all, is_paper_source
 from digest.fetch import fetch_all
 from digest.fetch.common import SourceFetchResult
-from digest.models import Cluster, Group, Item
+from digest.llm import CostTracker
+from digest.llm import make_client as make_llm_client
+from digest.models import Cluster, Group, Item, ScoredCluster, Summary
 from digest.prefilter import load_filters, prefilter
+from digest.rank import rank_clusters, write_scored_json
 from digest.settings import load_settings
 from digest.sources import load_sources
 from digest.state import load_seen, unseen_clusters
+from digest.summarize import generate_overviews, summarize_clusters
 
 ENRICH_SAMPLE_PER_GROUP = 3
 
@@ -133,15 +139,80 @@ async def run_dry_run() -> None:
     _print_enrich_report(enriched_sample, len(new_clusters))
 
 
+def _print_rank_report(scored: list[ScoredCluster]) -> None:
+    kept = [sc for sc in scored if sc.kept]
+    by_group = Counter(sc.cluster.group for sc in kept)
+    print(f"\nRank: {len(scored)} scored, {len(kept)} kept ({dict(by_group)})")
+    print("  out/scored.json written with every scored cluster (kept and dropped)")
+    for sc in sorted(kept, key=lambda s: s.final_score, reverse=True)[:5]:
+        print(f'    [{sc.final_score:.1f}] "{sc.cluster.lead.title[:60]}" -- {sc.reason}')
+
+
+def _print_summarize_report(kept: list[Cluster], summaries: dict[str, Summary]) -> None:
+    print(f"\nSummarize: {len(summaries)}/{len(kept)} kept clusters got a full summary")
+    for _cluster_id, summary in list(summaries.items())[:3]:
+        print(f'  "{summary.text[:100]}"')
+        print(f"    why it matters: {summary.why_it_matters[:100]}")
+        if summary.law:
+            print(f"    law: {summary.law.jurisdiction}, {summary.law.status.value}")
+
+
+def _print_cost_report(cost: CostTracker) -> None:
+    print("\nCost:")
+    print(json.dumps(cost.summary(), indent=2))
+
+
+async def run_from_fixture(path: Path) -> None:
+    settings = load_settings()
+    raw = json.loads(path.read_text())
+    clusters = [Cluster.model_validate(c) for c in raw]
+    print(f"Loaded {len(clusters)} clusters from fixture {path}")
+
+    seen = load_seen()
+    new_clusters = unseen_clusters(clusters, seen)
+    print(f"{len(new_clusters)} of {len(clusters)} are new (not already in state/seen.json)")
+
+    cost = CostTracker(token_cap=settings.token_cap_per_run)
+    async with make_llm_client() as client:
+        scored = await rank_clusters(new_clusters, settings, client=client, cost=cost)
+        write_scored_json(scored)
+        _print_rank_report(scored)
+
+        kept = [sc.cluster for sc in scored if sc.kept]
+        await enrich_all(kept, settings.enrich)
+
+        summaries = await summarize_clusters(kept, settings, client=client, cost=cost)
+        _print_summarize_report(kept, summaries)
+
+        scored_by_group: dict[Group, list[ScoredCluster]] = defaultdict(list)
+        for sc in scored:
+            if sc.kept:
+                scored_by_group[sc.cluster.group].append(sc)
+        overviews = await generate_overviews(
+            scored_by_group, summaries, settings, client=client, cost=cost
+        )
+
+    print("\nGerman overviews:")
+    for group, text in overviews.items():
+        print(f"  [{group.value}] {text}")
+
+    cost.write_log()
+    _print_cost_report(cost)
+
+
 def app() -> None:
     parser = build_parser()
     args = parser.parse_args()
+
+    if args.from_fixture:
+        asyncio.run(run_from_fixture(Path(args.from_fixture)))
+        return
 
     if args.dry_run:
         asyncio.run(run_dry_run())
         return
 
-    parser.error("no pipeline stages are implemented yet; use --dry-run")
+    parser.error("no pipeline stages are implemented yet; use --dry-run or --from-fixture")
 
 
 if __name__ == "__main__":
