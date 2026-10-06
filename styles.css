@@ -1,0 +1,170 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #6b6b6b;
+  --card-bg: #f7f7f8;
+  --border: #e2e2e4;
+  --link: #0b5fff;
+  --badge-bg: #eef2ff;
+  --badge-fg: #1e3a8a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --fg: #e8e8e8;
+    --muted: #9a9a9a;
+    --card-bg: #1c1c1e;
+    --border: #2e2e30;
+    --link: #7aa2ff;
+    --badge-bg: #1e293b;
+    --badge-fg: #93c5fd;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  max-width: 680px;
+  margin-inline: auto;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+header {
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  margin: 0 0 0.25rem;
+}
+
+.date {
+  color: var(--muted);
+  margin: 0;
+}
+
+nav a,
+.archive a,
+footer a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.group {
+  margin-bottom: 2.5rem;
+}
+
+.group h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+
+.overview {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+.card h3 a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.card h3 a:hover {
+  text-decoration: underline;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.6rem;
+  align-items: center;
+}
+
+.badge {
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.summary {
+  margin: 0 0 0.5rem;
+}
+
+.why-it-matters {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.also-covered {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.also-covered a {
+  color: var(--link);
+}
+
+.empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
+details.also-considered {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+details.also-considered summary {
+  cursor: pointer;
+}
+
+details.also-considered ul {
+  padding-left: 1.2rem;
+}
+
+.archive {
+  padding-left: 1.2rem;
+}
+
+footer {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
