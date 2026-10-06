@@ -46,7 +46,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add state/seen.json
-          git diff --staged --quiet || git commit -m "Update seen.json [skip ci]"
+          [ -f state/podcast_episodes.json ] && git add state/podcast_episodes.json
+          git diff --staged --quiet || git commit -m "Update state [skip ci]"
           git push
 
       - name: Deploy to GitHub Pages
@@ -56,3 +57,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./site
+          # site/ is rebuilt from scratch every run (nothing from previous
+          # days is checked out into it), and this action's default is to
+          # wipe the whole publish branch before copying site/ in -- without
+          # keep_files, every deploy would delete every earlier digest page
+          # and podcast episode, 404-ing the podcast feed's own back
+          # catalogue within a day. Orphaned files past state's own
+          # retention window (seen.json / podcast_episodes.json) just sit
+          # unlinked on gh-pages rather than being deleted -- a storage
+          # cost, not a correctness problem, at this project's volume.
+          keep_files: true

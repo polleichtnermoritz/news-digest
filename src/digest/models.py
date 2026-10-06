@@ -121,3 +121,14 @@ class Digest(BaseModel):
 
     date: date
     groups: list[GroupDigest] = Field(default_factory=list)
+
+
+class PodcastEpisode(BaseModel):
+    """One published podcast episode, persisted in state/podcast_episodes.json
+    so the RSS feed can list past episodes without needing to check out the
+    gh-pages branch at render time."""
+
+    date: date
+    title: str
+    mp3_path: str  # relative to the site root, e.g. "podcast/2026-10-07.mp3"
+    mp3_bytes: int

@@ -19,11 +19,12 @@ from digest.fetch import fetch_all
 from digest.fetch.common import SourceFetchResult
 from digest.llm import CostTracker
 from digest.llm import make_client as make_llm_client
-from digest.models import Cluster, Digest, Group, Item, ScoredCluster, Summary
+from digest.models import Cluster, Digest, Group, Item, PodcastEpisode, ScoredCluster, Summary
 from digest.notify import TelegramNotifier, format_error_message, format_success_message
+from digest.podcast import render_podcast
 from digest.prefilter import load_filters, prefilter
 from digest.rank import rank_clusters, write_scored_json
-from digest.render import build_digest, render_site
+from digest.render import DEFAULT_SITE_DIR, build_digest, render_site
 from digest.settings import PROJECT_ROOT, Settings, load_settings
 from digest.sources import load_sources
 from digest.state import load_seen, mark_seen, prune_seen, save_seen, unseen_clusters
@@ -187,11 +188,11 @@ async def rank_enrich_summarize_render(
     client: anthropic.AsyncAnthropic,
     cost: CostTracker,
     run_date: date,
-) -> tuple[list[ScoredCluster], Digest]:
+) -> tuple[list[ScoredCluster], Digest, PodcastEpisode | None]:
     """Shared tail of the pipeline: rank -> write scored.json -> enrich the
-    kept leads -> summarize -> German overview -> render. Used by both
-    --from-fixture (read-only w.r.t. state/seen.json) and --run (which marks
-    the kept clusters seen afterwards)."""
+    kept leads -> summarize -> German overview -> render -> podcast episode.
+    Used by both --from-fixture (read-only w.r.t. state/seen.json) and --run
+    (which marks the kept clusters seen afterwards)."""
     scored = await rank_clusters(new_clusters, settings, client=client, cost=cost)
     write_scored_json(scored)
     _print_rank_report(scored)
@@ -222,7 +223,20 @@ async def rank_enrich_summarize_render(
     page_path = render_site(digest)
     print(f"\nRendered {page_path.relative_to(PROJECT_ROOT)}")
 
-    return scored, digest
+    episode = await render_podcast(scored, summaries, run_date, settings, DEFAULT_SITE_DIR)
+    _print_podcast_report(episode)
+
+    return scored, digest, episode
+
+
+def _print_podcast_report(episode: PodcastEpisode | None) -> None:
+    if episode is None:
+        print("\nPodcast: skipped (disabled, or no kept stories)")
+        return
+    print(
+        f"\nPodcast: {episode.title} -> {episode.mp3_path} "
+        f"({episode.mp3_bytes / 1024:.0f} KB), feed.xml updated"
+    )
 
 
 async def run_from_fixture(path: Path) -> None:
@@ -291,7 +305,7 @@ async def run_live(force: bool = False) -> bool:
         run_date = datetime.now(UTC).date()
         cost = CostTracker(token_cap=settings.token_cap_per_run)
         async with make_llm_client() as client:
-            scored, digest = await rank_enrich_summarize_render(
+            scored, digest, episode = await rank_enrich_summarize_render(
                 new_clusters, settings, client, cost, run_date
             )
 
@@ -311,6 +325,8 @@ async def run_live(force: bool = False) -> bool:
 
     page_url = f"{settings.site_base_url}/digest/{run_date.isoformat()}.html"
     message = format_success_message(digest, page_url)
+    if episode is not None:
+        message += f"\n\U0001f3a7 Podcast: {settings.site_base_url}/feed.xml"
     await _try_notify(message)
 
     _write_github_output("ran", "true")

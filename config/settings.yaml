@@ -23,3 +23,9 @@ cluster:
 
 state:
   seen_retention_days: 30
+
+podcast:
+  enabled: true
+  voice: "en-US-GuyNeural"
+  story_count: 6
+  episode_retention_days: 30

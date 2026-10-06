@@ -36,6 +36,13 @@ class StateSettings(BaseModel):
     seen_retention_days: int
 
 
+class PodcastSettings(BaseModel):
+    enabled: bool
+    voice: str
+    story_count: int
+    episode_retention_days: int
+
+
 class Settings(BaseModel):
     delivery_hour_vienna: int
     site_base_url: str
@@ -45,6 +52,7 @@ class Settings(BaseModel):
     enrich: EnrichSettings
     cluster: ClusterSettings
     state: StateSettings
+    podcast: PodcastSettings
 
 
 def load_settings(path: Path = DEFAULT_SETTINGS_PATH) -> Settings:

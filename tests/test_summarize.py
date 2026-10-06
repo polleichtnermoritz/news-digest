@@ -6,6 +6,7 @@ from digest.settings import (
     ClusterSettings,
     EnrichSettings,
     Models,
+    PodcastSettings,
     Settings,
     StateSettings,
     TopNPerGroup,
@@ -30,6 +31,9 @@ def make_settings() -> Settings:
         enrich=EnrichSettings(max_words=2000, timeout_seconds=10),
         cluster=ClusterSettings(title_similarity_threshold=90),
         state=StateSettings(seen_retention_days=30),
+        podcast=PodcastSettings(
+            enabled=True, voice="en-US-GuyNeural", story_count=6, episode_retention_days=30
+        ),
     )
 
 

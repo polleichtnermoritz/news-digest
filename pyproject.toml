@@ -16,6 +16,7 @@ dependencies = [
     "anthropic>=0.40",
     "tenacity>=9.0",
     "pyyaml>=6.0",
+    "edge-tts>=7.2.8",
 ]
 
 [project.scripts]
