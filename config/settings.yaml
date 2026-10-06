@@ -1,0 +1,23 @@
+delivery_hour_vienna: 7
+
+top_n_per_group:
+  tech: 8
+  geopolitics: 8
+  science: 5
+  laws_minimum: 2
+
+models:
+  ranking: "claude-haiku-4-5-20251001"
+  summarize: "claude-haiku-4-5-20251001"
+
+token_cap_per_run: 200000
+
+enrich:
+  max_words: 2000
+  timeout_seconds: 10
+
+cluster:
+  title_similarity_threshold: 90
+
+state:
+  seen_retention_days: 30

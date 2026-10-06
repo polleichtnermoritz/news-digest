@@ -1,0 +1,37 @@
+# Topic descriptions and keywords used in the ranking prompt (milestone M4).
+
+tech:
+  description: >
+    AI, informatics, and software engineering — new tools, languages,
+    security issues, and notable industry moves.
+  keywords:
+    - artificial intelligence
+    - software engineering
+    - programming language
+    - security vulnerability
+    - open source
+    - developer tools
+
+geopolitics:
+  description: >
+    Important world events, and new laws or regulations that get little
+    coverage, with a focus on Austria and the EU.
+  keywords:
+    - law
+    - regulation
+    - parliament
+    - treaty
+    - sanctions
+    - election
+    - Austria
+    - European Union
+
+science:
+  description: >
+    New AI papers, models, benchmarks, and techniques.
+  keywords:
+    - paper
+    - benchmark
+    - model release
+    - training technique
+    - evaluation

@@ -1,0 +1,386 @@
+# Allowlist of sources. Anything not listed here never enters the pipeline.
+# `verified: false` means the feed URL has not yet been checked by
+# scripts/check_feeds.py (that happens in milestone M0.5) — do not fetch
+# from a source until it is verified.
+#
+# Fields: name, group (tech|geopolitics|science), tier (primary|journalism|think_tank),
+# language, weight (1-3), access (rss|api|page), url, verified
+
+sources:
+  - name: "Parlamentskorrespondenz"
+    group: geopolitics
+    tier: primary
+    language: de
+    weight: 3
+    access: rss
+    url: "https://www.parlament.gv.at/aktuelles/pk/rss"
+    verified: false
+
+  - name: "RIS Bundesgesetzblatt"
+    group: geopolitics
+    tier: primary
+    language: de
+    weight: 3
+    access: rss
+    url: "https://www.ris.bka.gv.at/Ergebnis.wxe?Abfrage=BgblAuth"
+    verified: false
+
+  - name: "ORF.at"
+    group: geopolitics
+    tier: journalism
+    language: de
+    weight: 2
+    access: rss
+    url: "https://rss.orf.at/news.xml"
+    verified: false
+
+  - name: "Der Standard"
+    group: geopolitics
+    tier: journalism
+    language: de
+    weight: 2
+    access: rss
+    url: "https://www.derstandard.at/rss"
+    verified: false
+
+  - name: "Die Presse"
+    group: geopolitics
+    tier: journalism
+    language: de
+    weight: 2
+    access: rss
+    url: "https://www.diepresse.com/rss/Home"
+    verified: false
+
+  - name: "profil"
+    group: geopolitics
+    tier: journalism
+    language: de
+    weight: 1
+    access: rss
+    url: "https://www.profil.at/feed"
+    verified: false
+
+  - name: "EUR-Lex Official Journal L series"
+    group: geopolitics
+    tier: primary
+    language: en
+    weight: 3
+    access: rss
+    url: "https://eur-lex.europa.eu/oj/direct-access.html"
+    verified: false
+
+  - name: "European Parliament press"
+    group: geopolitics
+    tier: primary
+    language: en
+    weight: 3
+    access: rss
+    url: "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml"
+    verified: false
+
+  - name: "Council of the EU press"
+    group: geopolitics
+    tier: primary
+    language: en
+    weight: 3
+    access: rss
+    url: "https://www.consilium.europa.eu/en/press/press-releases/"
+    verified: false
+
+  - name: "Euractiv"
+    group: geopolitics
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://www.euractiv.com/feed/"
+    verified: false
+
+  - name: "Politico Europe"
+    group: geopolitics
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://www.politico.eu/feed/"
+    verified: false
+
+  - name: "AP News"
+    group: geopolitics
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://apnews.com/apf-topnews"
+    verified: false
+
+  - name: "BBC World"
+    group: geopolitics
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://feeds.bbci.co.uk/news/world/rss.xml"
+    verified: false
+
+  - name: "The Guardian"
+    group: geopolitics
+    tier: journalism
+    language: en
+    weight: 2
+    access: api
+    url: "https://content.guardianapis.com/search"
+    verified: false
+
+  - name: "Deutsche Welle"
+    group: geopolitics
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://rss.dw.com/rdf/rss-en-world"
+    verified: false
+
+  - name: "NZZ"
+    group: geopolitics
+    tier: journalism
+    language: de
+    weight: 2
+    access: rss
+    url: "https://www.nzz.ch/international.rss"
+    verified: false
+
+  - name: "Le Monde (English)"
+    group: geopolitics
+    tier: journalism
+    language: en
+    weight: 1
+    access: rss
+    url: "https://www.lemonde.fr/en/rss/une.xml"
+    verified: false
+
+  - name: "SWP Berlin"
+    group: geopolitics
+    tier: think_tank
+    language: de
+    weight: 2
+    access: rss
+    url: "https://www.swp-berlin.org/rss/publikationen"
+    verified: false
+
+  - name: "ECFR"
+    group: geopolitics
+    tier: think_tank
+    language: en
+    weight: 2
+    access: rss
+    url: "https://ecfr.eu/feed/"
+    verified: false
+
+  - name: "Chatham House"
+    group: geopolitics
+    tier: think_tank
+    language: en
+    weight: 2
+    access: rss
+    url: "https://www.chathamhouse.org/rss.xml"
+    verified: false
+
+  - name: "Carnegie Endowment"
+    group: geopolitics
+    tier: think_tank
+    language: en
+    weight: 2
+    access: rss
+    url: "https://carnegieendowment.org/rss/solr/?fa=global.rss"
+    verified: false
+
+  - name: "Foreign Affairs"
+    group: geopolitics
+    tier: think_tank
+    language: en
+    weight: 1
+    access: rss
+    url: "https://www.foreignaffairs.com/rss.xml"
+    verified: false
+
+  - name: "Heise"
+    group: tech
+    tier: journalism
+    language: de
+    weight: 2
+    access: rss
+    url: "https://www.heise.de/rss/heise-atom.xml"
+    verified: false
+
+  - name: "Golem"
+    group: tech
+    tier: journalism
+    language: de
+    weight: 2
+    access: rss
+    url: "https://rss.golem.de/rss.php?feed=RSS2.0"
+    verified: false
+
+  - name: "Ars Technica"
+    group: tech
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://feeds.arstechnica.com/arstechnica/index"
+    verified: false
+
+  - name: "The Register"
+    group: tech
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://www.theregister.com/headlines.atom"
+    verified: false
+
+  - name: "LWN.net"
+    group: tech
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://lwn.net/headlines/rss"
+    verified: false
+
+  - name: "IEEE Spectrum"
+    group: tech
+    tier: journalism
+    language: en
+    weight: 1
+    access: rss
+    url: "https://spectrum.ieee.org/feeds/feed.rss"
+    verified: false
+
+  - name: "MIT Technology Review"
+    group: tech
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://www.technologyreview.com/feed/"
+    verified: false
+
+  - name: "InfoQ"
+    group: tech
+    tier: journalism
+    language: en
+    weight: 1
+    access: rss
+    url: "https://feed.infoq.com/"
+    verified: false
+
+  - name: "arXiv cs.AI"
+    group: science
+    tier: primary
+    language: en
+    weight: 3
+    access: api
+    url: "http://export.arxiv.org/api/query?search_query=cat:cs.AI"
+    verified: false
+
+  - name: "arXiv cs.LG"
+    group: science
+    tier: primary
+    language: en
+    weight: 3
+    access: api
+    url: "http://export.arxiv.org/api/query?search_query=cat:cs.LG"
+    verified: false
+
+  - name: "arXiv cs.CL"
+    group: science
+    tier: primary
+    language: en
+    weight: 3
+    access: api
+    url: "http://export.arxiv.org/api/query?search_query=cat:cs.CL"
+    verified: false
+
+  - name: "arXiv cs.SE"
+    group: science
+    tier: primary
+    language: en
+    weight: 2
+    access: api
+    url: "http://export.arxiv.org/api/query?search_query=cat:cs.SE"
+    verified: false
+
+  - name: "Hugging Face Daily Papers"
+    group: science
+    tier: primary
+    language: en
+    weight: 2
+    access: api
+    url: "https://huggingface.co/api/daily_papers"
+    verified: false
+
+  - name: "Anthropic"
+    group: science
+    tier: primary
+    language: en
+    weight: 3
+    access: rss
+    url: "https://www.anthropic.com/news/rss.xml"
+    verified: false
+
+  - name: "OpenAI"
+    group: science
+    tier: primary
+    language: en
+    weight: 3
+    access: page
+    url: "https://openai.com/news/"
+    verified: false
+
+  - name: "Google DeepMind"
+    group: science
+    tier: primary
+    language: en
+    weight: 3
+    access: rss
+    url: "https://deepmind.google/discover/blog/rss.xml"
+    verified: false
+
+  - name: "Meta AI"
+    group: science
+    tier: primary
+    language: en
+    weight: 2
+    access: page
+    url: "https://ai.meta.com/blog/"
+    verified: false
+
+  - name: "Mistral"
+    group: science
+    tier: primary
+    language: en
+    weight: 2
+    access: rss
+    url: "https://mistral.ai/news/rss.xml"
+    verified: false
+
+  - name: "Quanta Magazine"
+    group: science
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://api.quantamagazine.org/feed/"
+    verified: false
+
+  - name: "Nature News"
+    group: science
+    tier: journalism
+    language: en
+    weight: 2
+    access: rss
+    url: "https://www.nature.com/nature.rss"
+    verified: false

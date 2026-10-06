@@ -1,0 +1,21 @@
+# Pre-filter rules applied in code (no LLM) before clustering.
+# Drops routine items from primary law feeds and anything with an empty teaser.
+# Tuned in milestone M1 against recorded fixtures.
+
+drop_if_empty_teaser: true
+
+law_feed_drop_keywords:
+  de:
+    - "Berichtigung"
+    - "Kundmachung"
+    - "Zolltarif"
+    - "Gebührenordnung"
+  en:
+    - "correction"
+    - "tariff schedule"
+    - "administrative order"
+
+law_feed_drop_document_types:
+  - "correction"
+  - "tariff"
+  - "administrative_ordinance"
