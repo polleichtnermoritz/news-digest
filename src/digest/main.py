@@ -6,12 +6,14 @@ import argparse
 import asyncio
 from collections import Counter
 
+from digest.cluster import cluster_items
 from digest.fetch import fetch_all
 from digest.fetch.common import SourceFetchResult
-from digest.models import Item
+from digest.models import Cluster, Item
 from digest.prefilter import load_filters, prefilter
 from digest.settings import load_settings
 from digest.sources import load_sources
+from digest.state import load_seen, unseen_clusters
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -56,6 +58,25 @@ def _print_prefilter_report(before: list[Item], after: list[Item]) -> None:
         print(f"  {source_name}: {b} -> {a}{marker}")
 
 
+def _print_cluster_report(
+    clusters: list[Cluster], seen_count: int, new_clusters: list[Cluster]
+) -> None:
+    by_group = Counter(cluster.group for cluster in clusters)
+    print(f"\nClustering: {len(clusters)} clusters ({dict(by_group)})\n")
+
+    multi_source = [c for c in clusters if c.also_covered_by]
+    print(f"  {len(multi_source)} clusters have more than one outlet")
+    for c in multi_source[:5]:
+        outlets = [c.lead.source, *(i.source for i in c.also_covered_by)]
+        print(f"    \"{c.lead.title[:70]}\" <- {outlets}")
+
+    print(
+        f"\nState (state/seen.json, read-only in --dry-run): "
+        f"{seen_count} previously-sent cluster ids loaded, "
+        f"{len(new_clusters)} of today's {len(clusters)} clusters are new"
+    )
+
+
 async def run_dry_run() -> None:
     settings = load_settings()
     print("Loaded settings:")
@@ -69,6 +90,11 @@ async def run_dry_run() -> None:
     filters = load_filters()
     filtered_items = prefilter(all_items, filters)
     _print_prefilter_report(all_items, filtered_items)
+
+    clusters = cluster_items(filtered_items, threshold=settings.cluster.title_similarity_threshold)
+    seen = load_seen()
+    new_clusters = unseen_clusters(clusters, seen)
+    _print_cluster_report(clusters, len(seen), new_clusters)
 
 
 def app() -> None:
