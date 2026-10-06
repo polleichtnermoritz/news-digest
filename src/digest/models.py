@@ -97,11 +97,23 @@ class Summary(BaseModel):
     law: LawFields | None = None
 
 
+class RenderedItem(BaseModel):
+    """One kept cluster paired with its summary, ready for a template to
+    render as a card. `summary` is None if summarization failed or the
+    token budget ran out first -- the card then falls back to the lead's
+    title/teaser only, per the plan's "still publish headlines" guardrail.
+    """
+
+    cluster: Cluster
+    summary: Summary | None = None
+
+
 class GroupDigest(BaseModel):
     group: Group
     overview_de: str
-    summaries: list[Summary] = Field(default_factory=list)
+    items: list[RenderedItem] = Field(default_factory=list)
     also_considered: list[ScoredCluster] = Field(default_factory=list)
+    also_considered_total: int = 0
 
 
 class Digest(BaseModel):

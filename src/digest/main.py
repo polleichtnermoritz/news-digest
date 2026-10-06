@@ -6,6 +6,7 @@ import argparse
 import asyncio
 import json
 from collections import Counter, defaultdict
+from datetime import UTC, datetime
 from pathlib import Path
 
 from digest.cluster import cluster_items
@@ -17,7 +18,8 @@ from digest.llm import make_client as make_llm_client
 from digest.models import Cluster, Group, Item, ScoredCluster, Summary
 from digest.prefilter import load_filters, prefilter
 from digest.rank import rank_clusters, write_scored_json
-from digest.settings import load_settings
+from digest.render import build_digest, render_site
+from digest.settings import PROJECT_ROOT, load_settings
 from digest.sources import load_sources
 from digest.state import load_seen, unseen_clusters
 from digest.summarize import generate_overviews, summarize_clusters
@@ -198,6 +200,12 @@ async def run_from_fixture(path: Path) -> None:
 
     cost.write_log()
     _print_cost_report(cost)
+
+    run_date = datetime.now(UTC).date()
+    digest = build_digest(run_date, scored, summaries, overviews)
+    (PROJECT_ROOT / "out" / "digest.json").write_text(digest.model_dump_json(indent=2))
+    page_path = render_site(digest)
+    print(f"\nRendered {page_path.relative_to(PROJECT_ROOT)}")
 
 
 def app() -> None:
