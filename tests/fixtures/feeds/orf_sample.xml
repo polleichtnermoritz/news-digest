@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:orfon="http://rss.orf.at/1.0/"
+  xmlns="http://purl.org/rss/1.0/"
+>
+<channel rdf:about="https://orf.at/">
+   <title>news.ORF.at</title>
+   <link>https://orf.at/</link>
+   <dc:date>2026-10-06T21:45:32+02:00</dc:date>
+      <description>Die aktuellsten Nachrichten auf einen Blick - aus Österreich und der ganzen Welt. In Text, Bild und Video.</description>
+   <dc:publisher>ORF Österreichischer Rundfunk, Wien</dc:publisher>
+   <dc:creator>ORF Online und Teletext GmbH &amp; Co KG</dc:creator>
+   <dc:language>de</dc:language>
+   <dc:rights>Copyright &#169; 2026 ORF Online und Teletext GmbH &amp; Co KG</dc:rights>
+   <sy:updatePeriod>hourly</sy:updatePeriod>
+   <sy:updateFrequency>2</sy:updateFrequency>
+   <sy:updateBase>2000-01-01T00:00:00Z</sy:updateBase>
+   <orfon:site>news.ORF.at</orfon:site>
+
+
+
+   <items>
+      <rdf:Seq>
+         <rdf:li rdf:resource="https://orf.at/stories/3444241/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444309/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444308/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444263/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444306/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444303/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444301/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444300/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444297/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444295/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444294/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444291/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444286/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444290/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444289/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444285/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444284/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444283/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444275/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3443884/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444273/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444268/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444269/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444265/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444262/" />
+
+   <rdf:li rdf:resource="https://orf.at/stories/3444260/" />
+
+
+      </rdf:Seq>
+   </items>
+</channel>
+<item rdf:about="https://orf.at/stories/3444241/">
+   <title>Krieg im Jemen treibt Menschen in die Flucht</title>
+   <description>Die Kämpfe im Jemen zwischen Regierungstruppen und der Huthi-Miliz führen laut UNO zunehmend zu Flucht und Vertreibung. Seit August flohen laut Zahlen vom Montag zumindest 184.000 Menschen. Mit der Eskalation der Gefechte dürfte die Zahl weiter steigen. Die Lage am Roten Meer ist instabil und unklar. Die jemenitische Armee sagte, wieder die Kontrolle über die Meerespassage Bad al-Mandab übernommen zu haben, die Huthis meldeten ihrerseits erneut Angriffe auf Saudi-Arabien.</description>
+   <link>https://orf.at/stories/3444241/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T21:45:32+02:00</dc:date>
+
+   <orfon:usid>news:3444241</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:story" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444309/">
+   <title>Schüsse an Stockholmer Schloss: Mann festgenommen</title>
+   
+   <link>https://orf.at/stories/3444309/</link>
+   <dc:subject>Chronik</dc:subject>
+   <dc:date>2026-10-06T20:31:55+02:00</dc:date>
+
+   <orfon:usid>news:3444309</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Nachrichten/Chronik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444308/">
+   <title>Frankfurter Buchmesse: Pfiffe für tschechischen Minister</title>
+   
+   <link>https://orf.at/stories/3444308/</link>
+   <dc:subject>Kultur</dc:subject>
+   <dc:date>2026-10-06T20:09:11+02:00</dc:date>
+
+   <orfon:usid>news:3444308</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:KulturUndFreizeit/KulturUeberblick" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444263/">
+   <title>EU will sich für Erweiterung wappnen</title>
+   <description>Die EU-Kommission will den EU-Beitrittsprozess vereinfachen und gleichzeitig stärkere Schutzklauseln in die Beitrittsverträge aufnehmen. Auch Reformen innerhalb der EU sind vorgesehen. Die Aufnahme neuer Mitgliedsstaaten mache es notwendig, „unsere Institutionen vorzubereiten, unsere Politik an neue Realitäten anzupassen“, sagte Kommissionspräsidentin Ursula von der Leyen anlässlich der Vorstellung der Pläne am Dienstag in Straßburg.</description>
+   <link>https://orf.at/stories/3444263/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T20:03:19+02:00</dc:date>
+
+   <orfon:usid>news:3444263</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:story" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444306/">
+   <title>Nahost-Experte Fuchs live zu Gast</title>
+   
+   <link>https://orf.at/stories/3444306/</link>
+   <dc:subject>Inland</dc:subject>
+   <dc:date>2026-10-06T19:59:24+02:00</dc:date>
+
+   <orfon:usid>news:3444306</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikInland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444303/">
+   <title>Meloni gewinnt zweite Vertrauensabstimmung zu Wahlrecht</title>
+   
+   <link>https://orf.at/stories/3444303/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T19:30:43+02:00</dc:date>
+
+   <orfon:usid>news:3444303</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444301/">
+   <title>Gruppenvergewaltigung in USA: Druck auf Uni steigt</title>
+   
+   <link>https://orf.at/stories/3444301/</link>
+   <dc:subject>Chronik</dc:subject>
+   <dc:date>2026-10-06T19:10:38+02:00</dc:date>
+
+   <orfon:usid>news:3444301</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Nachrichten/Chronik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444300/">
+   <title>Finnland stoppt Bau von Google-Rechenzentren</title>
+   
+   <link>https://orf.at/stories/3444300/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T18:35:08+02:00</dc:date>
+
+   <orfon:usid>news:3444300</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444297/">
+   <title>Französische Abgeordnete warf israelische Flagge auf Boden</title>
+   
+   <link>https://orf.at/stories/3444297/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T17:52:14+02:00</dc:date>
+
+   <orfon:usid>news:3444297</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444295/">
+   <title>Tschechien lässt Song Contest 2027 aus</title>
+   
+   <link>https://orf.at/stories/3444295/</link>
+   <dc:subject>Kultur</dc:subject>
+   <dc:date>2026-10-06T17:29:26+02:00</dc:date>
+
+   <orfon:usid>news:3444295</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:KulturUndFreizeit/Musik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444294/">
+   <title>Neue Ermittlungen wegen Falschaussage gegen Peter Pilz</title>
+   
+   <link>https://orf.at/stories/3444294/</link>
+   <dc:subject>Inland</dc:subject>
+   <dc:date>2026-10-06T17:17:16+02:00</dc:date>
+
+   <orfon:usid>news:3444294</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikInland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444291/">
+   <title>IWF: Lebensnötige Güter zunehmend schlechter erschwinglich</title>
+   
+   <link>https://orf.at/stories/3444291/</link>
+   <dc:subject>Wirtschaft</dc:subject>
+   <dc:date>2026-10-06T16:56:55+02:00</dc:date>
+
+   <orfon:usid>news:3444291</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Wirtschaft/Wirtschaftspolitik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444286/">
+   <title>Erneut Ausschreitungen bei Schülerprotesten</title>
+   <description>Seit Tagen machen Zigtausende Schülerinnen und Schüler in Frankreich ihrem Unmut über Lehrermangel und marode Schulgebäude Luft. Am Dienstag weiteten sich die Proteste aus, es kam erneut zu Ausschreitungen. Präsident Emmanuel Macron berief am Abend eine Krisensitzung ein. Die Proteste breiteten sich auch ins benachbarte Belgien aus.</description>
+   <link>https://orf.at/stories/3444286/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T16:50:57+02:00</dc:date>
+
+   <orfon:usid>news:3444286</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:story" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444290/">
+   <title>Frankreich testete modernisierte Atomrakete</title>
+   
+   <link>https://orf.at/stories/3444290/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T16:26:47+02:00</dc:date>
+
+   <orfon:usid>news:3444290</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444289/">
+   <title>Kiew: Netze zum Schutz vor Drohnen an Brücke angebracht</title>
+   
+   <link>https://orf.at/stories/3444289/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T16:15:44+02:00</dc:date>
+
+   <orfon:usid>news:3444289</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444285/">
+   <title>Mädchen stach in Istanbul Schülerinnen nieder: Eine Tote</title>
+   
+   <link>https://orf.at/stories/3444285/</link>
+   <dc:subject>Chronik</dc:subject>
+   <dc:date>2026-10-06T15:24:43+02:00</dc:date>
+
+   <orfon:usid>news:3444285</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Nachrichten/Chronik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444284/">
+   <title>WKO gibt sich neue Regeln für Gehälter und Compliance</title>
+   
+   <link>https://orf.at/stories/3444284/</link>
+   <dc:subject>Wirtschaft</dc:subject>
+   <dc:date>2026-10-06T15:20:58+02:00</dc:date>
+
+   <orfon:usid>news:3444284</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Wirtschaft/Wirtschaftspolitik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444283/">
+   <title>Paramount schließt Warner-Übernahme ab</title>
+   
+   <link>https://orf.at/stories/3444283/</link>
+   <dc:subject>Medien</dc:subject>
+   <dc:date>2026-10-06T15:11:30+02:00</dc:date>
+
+   <orfon:usid>news:3444283</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:MedienUndWerbung/Medien" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444275/">
+   <title>Deutsch-Österreichischer Lyrikpreis an Kinsky und Cotten</title>
+   
+   <link>https://orf.at/stories/3444275/</link>
+   <dc:subject>Kultur</dc:subject>
+   <dc:date>2026-10-06T14:40:06+02:00</dc:date>
+
+   <orfon:usid>news:3444275</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:KulturUndFreizeit/Literatur" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3443884/">
+   <title>Jenseits der Kleinfamilie</title>
+   <description>Die Bücher der österreichischen Autorin Mareike Fallwickl handeln von Ungerechtigkeit und Gewalt – aber auch davon, wie es anders gehen kann. Seit ihrem Romanerfolg „Die Wut, die bleibt“ im Jahr 2022 ist sie eine der meistgelesenen feministischen Stimmen im deutschsprachigen Raum. In ihrem fünften Roman „Haltet euch fest“ erzählt sie von einer utopischen Wohngemeinschaft und ihren Bewohnerinnen.</description>
+   <link>https://orf.at/stories/3443884/</link>
+   <dc:subject>Kultur</dc:subject>
+   <dc:date>2026-10-06T14:26:46+02:00</dc:date>
+
+   <orfon:usid>news:3443884</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:KulturUndFreizeit/Literatur" />
+   <orfon:storyType rdf:resource="urn:orfon:type:story" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444273/">
+   <title>FPÖ sieht Verhandlungen zu Wehrpflicht vorerst gescheitert</title>
+   
+   <link>https://orf.at/stories/3444273/</link>
+   <dc:subject>Inland</dc:subject>
+   <dc:date>2026-10-06T14:26:10+02:00</dc:date>
+
+   <orfon:usid>news:3444273</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikInland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444268/">
+   <title>Babler wendet sich an SPÖ-Mitglieder</title>
+   <description>Der scheidende SPÖ-Chef Andreas Babler hat sich am Dienstag erstmals nach Ankündigung seines Rückzugs an die Parteimitglieder gewendet. In einem Video auf Instagram fasste er die Ereignisse der vergangenen Tage zusammen und lobte den beschlossenen „geordneten Übergang“ in der Partei als „Riesenerfolg“. Auch Eva-Maria Holzleitner und Philip Kucher, die Babler künftig zur Seite stehen werden, meldeten sich zu Wort.</description>
+   <link>https://orf.at/stories/3444268/</link>
+   <dc:subject>Inland</dc:subject>
+   <dc:date>2026-10-06T14:12:26+02:00</dc:date>
+
+   <orfon:usid>news:3444268</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikInland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:story" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444269/">
+   <title>BWB fordert gesetzliche Änderungen bei Fernwärme</title>
+   
+   <link>https://orf.at/stories/3444269/</link>
+   <dc:subject>Wirtschaft</dc:subject>
+   <dc:date>2026-10-06T13:56:07+02:00</dc:date>
+
+   <orfon:usid>news:3444269</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Wirtschaft/Wirtschaftspolitik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444265/">
+   <title>Sachsen-Anhalt: Erster AfD-Landtagspräsident Deutschlands</title>
+   
+   <link>https://orf.at/stories/3444265/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T13:04:43+02:00</dc:date>
+
+   <orfon:usid>news:3444265</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444262/">
+   <title>Spaniens Justiz macht Weg für Rückkehr Puigdemonts frei</title>
+   
+   <link>https://orf.at/stories/3444262/</link>
+   <dc:subject>Ausland</dc:subject>
+   <dc:date>2026-10-06T12:46:33+02:00</dc:date>
+
+   <orfon:usid>news:3444262</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Politik/PolitikAusland" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+<item rdf:about="https://orf.at/stories/3444260/">
+   <title>Germanwings-Prozess: Klage Hinterbliebener abgewiesen</title>
+   
+   <link>https://orf.at/stories/3444260/</link>
+   <dc:subject>Chronik</dc:subject>
+   <dc:date>2026-10-06T12:24:24+02:00</dc:date>
+
+   <orfon:usid>news:3444260</orfon:usid>
+   <orfon:oewaCategory rdf:resource="urn:oewa:RedCont:Nachrichten/Chronik" />
+   <orfon:storyType rdf:resource="urn:orfon:type:ticker" />
+</item>
+
+
+</rdf:RDF>
+
+

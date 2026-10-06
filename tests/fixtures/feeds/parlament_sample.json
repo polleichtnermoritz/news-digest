@@ -1,0 +1,198 @@
+{
+  "pages": 1686,
+  "lastSync": "2026-10-06 22:33:10.0",
+  "count": 33706,
+  "header": [
+    {
+      "feldId": 1056,
+      "hidden": false,
+      "sort_rnr": 5,
+      "label": "Datum",
+      "sortable": "1",
+      "css_class": "datum-col",
+      "rnr": 1,
+      "listeId": 110,
+      "feld_name": "DATUM",
+      "class": "datum-col"
+    },
+    {
+      "vts_sort_field": "title_sort",
+      "feldId": 1055,
+      "hidden": false,
+      "rnr": 2,
+      "listeId": 110,
+      "label": "Titel",
+      "sortable": "1",
+      "feld_name": "PKTITEL"
+    },
+    {
+      "css_class": "col-10",
+      "feldId": 1054,
+      "hidden": false,
+      "rnr": 3,
+      "listeId": 110,
+      "label": "Nr.",
+      "sortable": "1",
+      "feld_name": "NUMMER",
+      "class": "col-10"
+    },
+    {
+      "feldId": 1053,
+      "hidden": true,
+      "rnr": 4,
+      "mediaType": "link",
+      "listeId": 110,
+      "label": "Link"
+    },
+    {
+      "vts_sort_field": "date_fresh",
+      "feldId": 1052,
+      "hidden": true,
+      "rnr": 5,
+      "listeId": 110,
+      "label": "Datum"
+    },
+    {
+      "feldId": 1049,
+      "hidden": true,
+      "rnr": 6,
+      "listeId": 110,
+      "label": "Jahr",
+      "feld_name": "JAHR"
+    },
+    {
+      "feldId": 1050,
+      "hidden": true,
+      "rnr": 7,
+      "mediaType": "title",
+      "listeId": 110,
+      "label": "Titel"
+    },
+    {
+      "feldId": 1051,
+      "hidden": true,
+      "rnr": 8,
+      "mediaType": "description",
+      "listeId": 110,
+      "label": "Untertitel"
+    },
+    {
+      "feldId": 1048,
+      "hidden": true,
+      "rnr": 9,
+      "mediaType": "themen",
+      "listeId": 110,
+      "label": "Abothemen",
+      "feld_name": "ABOTHEMEN",
+      "ist_werteliste": "1"
+    },
+    {
+      "feldId": 1047,
+      "hidden": true,
+      "rnr": 10,
+      "listeId": 110,
+      "label": "Bereich",
+      "feld_name": "SACHB",
+      "ist_werteliste": "1"
+    },
+    {
+      "feldId": 1046,
+      "hidden": true,
+      "rnr": 11,
+      "listeId": 110,
+      "label": "Stichworte",
+      "feld_name": "STW",
+      "ist_werteliste": "1"
+    },
+    {
+      "feldId": 1045,
+      "ist_range": "1",
+      "hidden": true,
+      "rnr": 12,
+      "mediaType": "datetime",
+      "listeId": 110,
+      "label": "Datum",
+      "feld_name": "DATERANGE"
+    },
+    {
+      "feldId": 1044,
+      "hidden": true,
+      "rnr": 13,
+      "mediaType": "typ",
+      "listeId": 110,
+      "label": "TOPTHEMA",
+      "feld_name": "TOPTHEMA",
+      "ist_werteliste": "1"
+    },
+    {
+      "feldId": 1043,
+      "hidden": true,
+      "rnr": 14,
+      "listeId": 110,
+      "label": "WENTRY",
+      "ist_web_item_id": "1"
+    },
+    {
+      "feldId": 1385,
+      "hidden": true,
+      "rnr": 15,
+      "mediaType": "wwwlink",
+      "listeId": 110,
+      "label": "Portallink",
+      "feld_name": "WWWLINK"
+    }
+  ],
+  "rows": [
+    [
+      "02.10.2026",
+      "<a href=\"/aktuelles/pk/jahr_2026/pk0902\">Die Parlamentswoche vom 5. bis 9. Oktober 2026</a><div class=\"pksub\">Bundesrat, Ausschüsse, Präsidialkonferenz, IPU-Versammlung, Camillo Award 2026</div>",
+      "PK0902",
+      "/aktuelles/pk/jahr_2026/pk0902",
+      "20261002PK0902",
+      "2026",
+      "Die Parlamentswoche vom 5. bis 9. Oktober 2026",
+      "Bundesrat, Ausschüsse, Präsidialkonferenz, IPU-Versammlung, Camillo Award 2026",
+      "[\"Termine\"]",
+      "[\"Vermischtes\"]",
+      "[\"Parlament\",\"Parlamentswoche\",\"Termine\"]",
+      "2026-10-02T00:00:00",
+      "Parlament und Demokratie",
+      39020744,
+      "https://www.parlament.gv.at/aktuelles/pk/jahr_2026/pk0902"
+    ],
+    [
+      "30.09.2026",
+      "<a href=\"/aktuelles/pk/jahr_2026/pk0891\">Österreich konnte seinen Platz unter den Strong Innovators behaupten</a><div class=\"pksub\">Wissenschaftsausschuss befasst sich mit Forschungs- und Technologiebericht der Bundesregierung</div>",
+      "PK0891",
+      "/aktuelles/pk/jahr_2026/pk0891",
+      "20260930PK0891",
+      "2026",
+      "Österreich konnte seinen Platz unter den Strong Innovators behaupten",
+      "Wissenschaftsausschuss befasst sich mit Forschungs- und Technologiebericht der Bundesregierung",
+      "[\"Wirtschaft\",\"Bildung\",\"Innovation, Technologie und Forschung\"]",
+      "[\"Ausschusssitzungen des Nationalrats\"]",
+      "[\"Bildung\",\"Forschung\",\"Fti\",\"Hanke\",\"Holzleitner\",\"Nationalrat\",\"Technologie\",\"Wirtschaft\",\"Wissenschaftsausschuss\",\"Zehetner\"]",
+      "2026-09-30T00:00:00",
+      "Wirtschaft",
+      38868025,
+      "https://www.parlament.gv.at/aktuelles/pk/jahr_2026/pk0891"
+    ],
+    [
+      "06.10.2026",
+      "<a href=\"/aktuelles/pk/jahr_2026/pk0912\">E-Control: Wettbewerb nimmt auf Energiemärkten wieder zu</a><div class=\"pksub\">Tätigkeitsbericht der Regulierungsbehörde für 2025 liegt vor</div>",
+      "PK0912",
+      "/aktuelles/pk/jahr_2026/pk0912",
+      "20261006PK0912",
+      "2026",
+      "E-Control: Wettbewerb nimmt auf Energiemärkten wieder zu",
+      "Tätigkeitsbericht der Regulierungsbehörde für 2025 liegt vor",
+      "[\"Wirtschaft\",\"Klima, Umwelt und Energie\",\"Soziales\"]",
+      "[\"Parlamentarische Materialien\"]",
+      "[\"Berichte\",\"E-Control\",\"Energie\",\"Klima\",\"Nationalrat\",\"Soziales\",\"Umwelt\",\"Wirtschaft\"]",
+      "2026-10-06T00:00:00",
+      "Wirtschaft",
+      39161261,
+      "https://www.parlament.gv.at/aktuelles/pk/jahr_2026/pk0912"
+    ]
+  ]
+}

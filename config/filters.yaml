@@ -1,6 +1,10 @@
 # Pre-filter rules applied in code (no LLM) before clustering.
-# Drops routine items from primary law feeds and anything with an empty teaser.
-# Tuned in milestone M1 against recorded fixtures.
+# Drops routine items from primary law feeds (by title keyword) and anything
+# with an empty teaser. Tuned in milestone M8 against recorded fixtures.
+#
+# The keyword check only applies to items whose source tier is "primary" and
+# group is "geopolitics" (the law/official-journal feeds) — it never touches
+# journalism or think-tank items.
 
 drop_if_empty_teaser: true
 
@@ -14,8 +18,3 @@ law_feed_drop_keywords:
     - "correction"
     - "tariff schedule"
     - "administrative order"
-
-law_feed_drop_document_types:
-  - "correction"
-  - "tariff"
-  - "administrative_ordinance"

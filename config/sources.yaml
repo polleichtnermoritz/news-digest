@@ -209,8 +209,12 @@ sources:
     weight: 2
     access: page
     url: "https://carnegieendowment.org/rss/solr/?fa=global.rss"
-    verified: true
-    note: "Reachable (HTTP 200) but returns zero feed entries, and a plain /rss path 404s. Needs a page scraper in M1, not a feed parser."
+    verified: false
+    note: >
+      Reachable (HTTP 200) but the page is a client-side-rendered Next.js
+      shell with zero article content in the raw HTML (confirmed: no
+      article links anywhere in the response body). Needs a headless
+      browser, same remediation as the WAF-blocked sources.
 
   - name: "Foreign Affairs"
     group: geopolitics
@@ -387,7 +391,7 @@ sources:
     language: en
     weight: 2
     access: page
-    url: "https://mistral.ai/news"
+    url: "https://mistral.ai/news/"
     verified: true
     note: >
       No official RSS found (several candidate /rss.xml paths 404), but the

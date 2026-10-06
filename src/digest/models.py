@@ -26,6 +26,26 @@ class LawStatus(StrEnum):
     IN_FORCE = "in_force"
 
 
+class Access(StrEnum):
+    RSS = "rss"
+    API = "api"
+    PAGE = "page"
+
+
+class Source(BaseModel):
+    """One allowlisted source, as declared in config/sources.yaml."""
+
+    name: str
+    group: Group
+    tier: Tier
+    language: str
+    weight: int = Field(ge=1, le=3)
+    access: Access
+    url: str
+    verified: bool
+    note: str | None = None
+
+
 class Item(BaseModel):
     """A single fetched article or paper, normalized across all sources."""
 

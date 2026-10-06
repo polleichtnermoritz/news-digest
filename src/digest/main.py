@@ -3,8 +3,15 @@
 from __future__ import annotations
 
 import argparse
+import asyncio
+from collections import Counter
 
+from digest.fetch import fetch_all
+from digest.fetch.common import SourceFetchResult
+from digest.models import Item
+from digest.prefilter import load_filters, prefilter
 from digest.settings import load_settings
+from digest.sources import load_sources
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -12,7 +19,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="load config and report what would run, without calling any LLM or network",
+        help="fetch and pre-filter every source and report counts, without calling any LLM",
     )
     parser.add_argument(
         "--stage",
@@ -24,14 +31,52 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _print_fetch_report(results: list[SourceFetchResult]) -> None:
+    ok = [r for r in results if not r.skipped and r.error is None]
+    skipped = [r for r in results if r.skipped]
+    failed = [r for r in results if not r.skipped and r.error is not None]
+
+    print(f"\nFetched {len(ok)} sources ok, {len(skipped)} skipped, {len(failed)} failed:\n")
+    for r in ok:
+        print(f"  {r.source_name}: {len(r.items)} items")
+    for r in skipped:
+        print(f"  {r.source_name}: skipped ({r.error})")
+    for r in failed:
+        print(f"  {r.source_name}: FAILED ({r.error})")
+
+
+def _print_prefilter_report(before: list[Item], after: list[Item]) -> None:
+    before_counts = Counter(item.source for item in before)
+    after_counts = Counter(item.source for item in after)
+
+    print(f"\nPre-filter: {len(before)} -> {len(after)} items\n")
+    for source_name in sorted(before_counts):
+        b, a = before_counts[source_name], after_counts.get(source_name, 0)
+        marker = f" ({b - a} dropped)" if b != a else ""
+        print(f"  {source_name}: {b} -> {a}{marker}")
+
+
+async def run_dry_run() -> None:
+    settings = load_settings()
+    print("Loaded settings:")
+    print(settings.model_dump_json(indent=2))
+
+    sources = load_sources()
+    results = await fetch_all(sources)
+    _print_fetch_report(results)
+
+    all_items = [item for r in results for item in r.items]
+    filters = load_filters()
+    filtered_items = prefilter(all_items, filters)
+    _print_prefilter_report(all_items, filtered_items)
+
+
 def app() -> None:
     parser = build_parser()
     args = parser.parse_args()
-    settings = load_settings()
 
     if args.dry_run:
-        print("Loaded settings:")
-        print(settings.model_dump_json(indent=2))
+        asyncio.run(run_dry_run())
         return
 
     parser.error("no pipeline stages are implemented yet; use --dry-run")
