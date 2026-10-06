@@ -7,13 +7,16 @@ import asyncio
 from collections import Counter
 
 from digest.cluster import cluster_items
+from digest.enrich import enrich_all, is_paper_source
 from digest.fetch import fetch_all
 from digest.fetch.common import SourceFetchResult
-from digest.models import Cluster, Item
+from digest.models import Cluster, Group, Item
 from digest.prefilter import load_filters, prefilter
 from digest.settings import load_settings
 from digest.sources import load_sources
 from digest.state import load_seen, unseen_clusters
+
+ENRICH_SAMPLE_PER_GROUP = 3
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -77,6 +80,35 @@ def _print_cluster_report(
     )
 
 
+def _sample_for_enrich(clusters: list[Cluster], per_group: int) -> list[Cluster]:
+    sample = []
+    counts: dict[Group, int] = {}
+    for cluster in clusters:
+        if is_paper_source(cluster.lead.source):
+            continue  # already has the full abstract as teaser, nothing to demo
+        count = counts.get(cluster.group, 0)
+        if count >= per_group:
+            continue
+        counts[cluster.group] = count + 1
+        sample.append(cluster)
+    return sample
+
+
+def _print_enrich_report(sample: list[Cluster], total_new: int) -> None:
+    print(
+        f"\nEnrich (sample of {len(sample)} out of {total_new} new clusters, up to "
+        f"{ENRICH_SAMPLE_PER_GROUP} per group -- full enrichment waits until after M4 ranking "
+        f"keeps only the top N, so --dry-run doesn't hit hundreds of external sites per run):\n"
+    )
+    for cluster in sample:
+        lead = cluster.lead
+        if lead.extracted_text:
+            word_count = len(lead.extracted_text.split())
+            print(f'  "{lead.title[:60]}" ({lead.source}): {word_count} words extracted')
+        else:
+            print(f'  "{lead.title[:60]}" ({lead.source}): fell back to teaser')
+
+
 async def run_dry_run() -> None:
     settings = load_settings()
     print("Loaded settings:")
@@ -95,6 +127,10 @@ async def run_dry_run() -> None:
     seen = load_seen()
     new_clusters = unseen_clusters(clusters, seen)
     _print_cluster_report(clusters, len(seen), new_clusters)
+
+    sample = _sample_for_enrich(new_clusters, ENRICH_SAMPLE_PER_GROUP)
+    enriched_sample = await enrich_all(sample, settings.enrich)
+    _print_enrich_report(enriched_sample, len(new_clusters))
 
 
 def app() -> None:
