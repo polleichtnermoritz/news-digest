@@ -1,0 +1,14 @@
+name: Notifier spike (M0.5)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  send-test-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram test message
+        run: |
+          curl -s -f "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            --data-urlencode "text=news-digest: test message sent from a GitHub Actions run (M0.5 spike)."
