@@ -218,13 +218,13 @@ async def rank_enrich_summarize_render(
     cost.write_log()
     _print_cost_report(cost)
 
-    digest = build_digest(run_date, scored, summaries, overviews)
-    (PROJECT_ROOT / "out" / "digest.json").write_text(digest.model_dump_json(indent=2))
-    page_path = render_site(digest)
-    print(f"\nRendered {page_path.relative_to(PROJECT_ROOT)}")
-
     episode = await render_podcast(scored, summaries, run_date, settings, DEFAULT_SITE_DIR)
     _print_podcast_report(episode)
+
+    digest = build_digest(run_date, scored, summaries, overviews)
+    (PROJECT_ROOT / "out" / "digest.json").write_text(digest.model_dump_json(indent=2))
+    page_path = render_site(digest, episode=episode, podcast_enabled=settings.podcast.enabled)
+    print(f"\nRendered {page_path.relative_to(PROJECT_ROOT)}")
 
     return scored, digest, episode
 

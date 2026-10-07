@@ -12,7 +12,15 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from digest.models import Digest, Group, GroupDigest, RenderedItem, ScoredCluster, Summary
+from digest.models import (
+    Digest,
+    Group,
+    GroupDigest,
+    PodcastEpisode,
+    RenderedItem,
+    ScoredCluster,
+    Summary,
+)
 from digest.settings import PROJECT_ROOT
 
 TEMPLATES_DIR = PROJECT_ROOT / "templates"
@@ -71,17 +79,26 @@ def _make_env() -> Environment:
     return env
 
 
-def render_site(digest: Digest, site_dir: Path = DEFAULT_SITE_DIR) -> Path:
+def render_site(
+    digest: Digest,
+    site_dir: Path = DEFAULT_SITE_DIR,
+    episode: PodcastEpisode | None = None,
+    podcast_enabled: bool = False,
+) -> Path:
     env = _make_env()
     digest_dir = site_dir / "digest"
     digest_dir.mkdir(parents=True, exist_ok=True)
 
     page_path = digest_dir / f"{digest.date.isoformat()}.html"
-    page_path.write_text(env.get_template("digest.html.j2").render(digest=digest))
+    page_path.write_text(
+        env.get_template("digest.html.j2").render(digest=digest, episode=episode)
+    )
 
     archive_dates = sorted((p.stem for p in digest_dir.glob("*.html")), reverse=True)
     index_html = env.get_template("index.html.j2").render(
-        latest_date=archive_dates[0], archive_dates=archive_dates
+        latest_date=archive_dates[0],
+        archive_dates=archive_dates,
+        podcast_enabled=podcast_enabled,
     )
     (site_dir / "index.html").write_text(index_html)
 

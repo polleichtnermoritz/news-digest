@@ -3,7 +3,17 @@ from pathlib import Path
 
 from lxml import html as lxml_html
 
-from digest.models import Cluster, Group, Item, LawFields, LawStatus, ScoredCluster, Summary, Tier
+from digest.models import (
+    Cluster,
+    Group,
+    Item,
+    LawFields,
+    LawStatus,
+    PodcastEpisode,
+    ScoredCluster,
+    Summary,
+    Tier,
+)
 from digest.render import build_digest, render_site
 
 
@@ -202,3 +212,43 @@ def test_render_site_shows_empty_state_for_a_group_with_no_kept_items(tmp_path: 
     html = page_path.read_text()
 
     assert "No stories today." in html  # geopolitics and science are empty
+
+
+def test_render_site_links_the_podcast_episode_when_one_exists(tmp_path: Path) -> None:
+    sc = make_scored("a", group=Group.TECH)
+    digest = build_digest(date(2026, 10, 6), [sc], {}, {})
+    episode = PodcastEpisode(
+        date=date(2026, 10, 6), title="Ep", mp3_path="podcast/2026-10-06.mp3", mp3_bytes=1000
+    )
+
+    page_path = render_site(
+        digest, site_dir=tmp_path / "site", episode=episode, podcast_enabled=True
+    )
+    html = page_path.read_text()
+
+    assert 'src="../podcast/2026-10-06.mp3"' in html
+    assert 'href="../feed.xml"' in html
+
+
+def test_render_site_omits_podcast_player_when_no_episode(tmp_path: Path) -> None:
+    sc = make_scored("a", group=Group.TECH)
+    digest = build_digest(date(2026, 10, 6), [sc], {}, {})
+
+    page_path = render_site(digest, site_dir=tmp_path / "site", episode=None)
+    html = page_path.read_text()
+
+    assert "podcast-player" not in html
+
+
+def test_render_site_index_links_feed_only_when_podcast_enabled(tmp_path: Path) -> None:
+    site_dir = tmp_path / "site"
+    sc = make_scored("a", group=Group.TECH)
+    digest = build_digest(date(2026, 10, 6), [sc], {}, {})
+
+    render_site(digest, site_dir=site_dir, podcast_enabled=True)
+    enabled_html = (site_dir / "index.html").read_text()
+    assert 'href="feed.xml"' in enabled_html
+
+    render_site(digest, site_dir=site_dir, podcast_enabled=False)
+    disabled_html = (site_dir / "index.html").read_text()
+    assert 'href="feed.xml"' not in disabled_html

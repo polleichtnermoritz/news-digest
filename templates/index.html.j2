@@ -12,6 +12,9 @@
 <header>
   <h1>Daily News Digest</h1>
   <p class="date">Latest: <a href="digest/{{ latest_date }}.html">{{ latest_date }}</a></p>
+  {% if podcast_enabled %}
+  <p class="podcast-subscribe">&#127911; <a href="feed.xml">Subscribe to the podcast</a></p>
+  {% endif %}
 </header>
 
 <h2>Archive</h2>

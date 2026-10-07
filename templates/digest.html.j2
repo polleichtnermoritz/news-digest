@@ -15,6 +15,16 @@
   <nav><a href="../index.html">&larr; Archive</a></nav>
 </header>
 
+{% if episode %}
+<section class="podcast-player">
+  <h2 class="podcast-label">&#127911; Listen to today's episode</h2>
+  <audio controls preload="none" src="../{{ episode.mp3_path }}">
+    Your browser doesn't support inline audio. <a href="../{{ episode.mp3_path }}">Download the episode</a> instead.
+  </audio>
+  <p class="podcast-subscribe"><a href="../feed.xml">Subscribe to the podcast</a></p>
+</section>
+{% endif %}
+
 {% for group in digest.groups %}
 <section class="group group-{{ group.group.value }}">
   <h2>{{ group.group | group_label }}</h2>
