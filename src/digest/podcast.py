@@ -20,6 +20,7 @@ from pathlib import Path
 import edge_tts
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from digest.enrich import is_paper_source
 from digest.models import PodcastEpisode, ScoredCluster, Summary
 from digest.render import TEMPLATES_DIR
 from digest.settings import PROJECT_ROOT, PodcastSettings, Settings
@@ -42,8 +43,13 @@ def spoken_date(d: date) -> str:
 
 
 def select_stories(scored: list[ScoredCluster], n: int) -> list[ScoredCluster]:
-    kept = [sc for sc in scored if sc.kept]
-    return sorted(kept, key=lambda sc: sc.final_score, reverse=True)[:n]
+    """Top N kept stories by score, excluding raw papers (arXiv, Hugging
+    Face Daily Papers) -- dense academic-abstract prose is hard to follow
+    as audio with no text to glance back at. Science *journalism* (Quanta,
+    Nature News) and AI-lab announcement posts are written in normal prose
+    and stay eligible."""
+    eligible = [sc for sc in scored if sc.kept and not is_paper_source(sc.cluster.lead.source)]
+    return sorted(eligible, key=lambda sc: sc.final_score, reverse=True)[:n]
 
 
 def build_script(

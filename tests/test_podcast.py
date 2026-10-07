@@ -48,12 +48,13 @@ def make_scored(
     final_score: float = 5.0,
     title: str | None = None,
     teaser: str = "A teaser.",
+    source: str = "Example Source",
 ) -> ScoredCluster:
     lead = Item(
         id=f"item-{cluster_id}",
         url=f"https://example.com/{cluster_id}",
         title=title or f"Story {cluster_id}",
-        source="Example Source",
+        source=source,
         group=group,
         tier=Tier.JOURNALISM,
         language="en",
@@ -88,6 +89,28 @@ def test_select_stories_picks_top_n_kept_across_groups_by_score() -> None:
     selected = select_stories(scored, n=3)
 
     assert [sc.cluster.id for sc in selected] == ["a", "b", "c"]
+
+
+def test_select_stories_excludes_raw_papers_but_keeps_science_journalism() -> None:
+    scored = [
+        make_scored(
+            "paper", group=Group.SCIENCE, final_score=10.0, source="arXiv cs.AI"
+        ),
+        make_scored(
+            "hf-paper",
+            group=Group.SCIENCE,
+            final_score=9.5,
+            source="Hugging Face Daily Papers",
+        ),
+        make_scored(
+            "quanta", group=Group.SCIENCE, final_score=6.0, source="Quanta Magazine"
+        ),
+        make_scored("tech", group=Group.TECH, final_score=5.0),
+    ]
+
+    selected = select_stories(scored, n=6)
+
+    assert [sc.cluster.id for sc in selected] == ["quanta", "tech"]
 
 
 def test_build_script_includes_all_stories_in_order_with_transitions() -> None:
