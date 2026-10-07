@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>News Digest</title>
+  <link>https://polleichtnermoritz.github.io/news-digest/</link>
+  <atom:link href="https://polleichtnermoritz.github.io/news-digest/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>A short daily audio digest of tech, geopolitics and AI-paper news.</description>
+  <language>en-us</language>
+  <itunes:explicit>false</itunes:explicit>
+  <itunes:category text="News"/>
+  <item>
+    <title>News Digest — 07.10.2026</title>
+    <description>News Digest — 07.10.2026</description>
+    <pubDate>Wed, 07 Oct 2026 07:00:00 +0000</pubDate>
+    <guid isPermaLink="false">news-digest-2026-10-07</guid>
+    <enclosure url="https://polleichtnermoritz.github.io/news-digest/podcast/2026-10-07.mp3" type="audio/mpeg" length="1219248"/>
+  </item>
+</channel>
+</rss>
