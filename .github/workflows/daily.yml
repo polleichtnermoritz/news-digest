@@ -20,6 +20,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check out existing site (so the archive list sees history)
+        uses: actions/checkout@v4
+        continue-on-error: true  # gh-pages may not exist yet on a fresh repo
+        with:
+          ref: gh-pages
+          path: site
+
+      - name: Strip nested git metadata from the checked-out site
+        run: rm -rf site/.git
+
       - name: Install uv
         uses: astral-sh/setup-uv@v3
         with:
@@ -57,13 +67,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./site
-          # site/ is rebuilt from scratch every run (nothing from previous
-          # days is checked out into it), and this action's default is to
-          # wipe the whole publish branch before copying site/ in -- without
-          # keep_files, every deploy would delete every earlier digest page
-          # and podcast episode, 404-ing the podcast feed's own back
-          # catalogue within a day. Orphaned files past state's own
-          # retention window (seen.json / podcast_episodes.json) just sit
-          # unlinked on gh-pages rather than being deleted -- a storage
+          # Belt-and-braces: site/ is normally seeded with gh-pages' current
+          # content above, so this matters mainly if that checkout step
+          # fails (e.g. gh-pages doesn't exist yet) -- without keep_files,
+          # this action's default wipes the whole publish branch before
+          # copying site/ in, which would delete every earlier digest page
+          # and podcast episode in that case. Orphaned files past state's
+          # own retention window (seen.json / podcast_episodes.json) just
+          # sit unlinked on gh-pages rather than being deleted -- a storage
           # cost, not a correctness problem, at this project's volume.
           keep_files: true
